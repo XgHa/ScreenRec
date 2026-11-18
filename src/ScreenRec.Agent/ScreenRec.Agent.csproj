@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ScreenRec.Agent</AssemblyName>
+    <RootNamespace>ScreenRec.Agent</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.0.0-rc1</Version>
+
+    <!-- 发布体积:不带调试符号与 XML 文档 -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <AllowedReferenceRelatedFileExtensions>none</AllowedReferenceRelatedFileExtensions>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <!--
+    刻意不引 WPF:agent 只做捕获/编码,不需要任何界面。
+    之前它和 UI 共用一个 exe,进程里会白白加载 PresentationFramework/PresentationCore/
+    PresentationNative,空跑就多占 25~30 MB —— 拆出来就是为了把这部分省掉。
+    注意也别引 System.Windows.Forms。
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\ScreenRec.Core\ScreenRec.Core.csproj" />
+  </ItemGroup>
+
+</Project>

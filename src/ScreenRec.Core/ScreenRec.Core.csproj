@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net9.0-windows(不带 10.0.x):避免引入 25MB 的 Microsoft.Windows.SDK.NET 投影。
+         ScreenRecorderLib 是 C++/CLI 混合程序集,内部原生调用 WGC/DDA,不需要托管 WinRT 投影。 -->
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ScreenRecorderLib" Version="7.0.1" />
+  </ItemGroup>
+
+</Project>

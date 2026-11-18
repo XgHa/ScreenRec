@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <AssemblyName>ScreenRec</AssemblyName>
+    <RootNamespace>ScreenRec.App</RootNamespace>
+    <Version>1.0.0-rc1</Version>
+
+    <!-- 发布体积:不带调试符号与 XML 文档(否则 ScreenRecorderLib 的 pdb 就 15MB) -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">false</DebugSymbols>
+    <AllowedReferenceRelatedFileExtensions>none</AllowedReferenceRelatedFileExtensions>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ScreenRec.Core\ScreenRec.Core.csproj" />
+  </ItemGroup>
+
+  <!--
+    图标只嵌到 exe 资源里(ApplicationIcon),不再作为 WPF Resource 打进 dll。
+    同一个 ico 走两条路会让 dll 多背 370 KB;窗口/托盘都从 exe 取图标即可
+    (WPF 窗口未显式设置 Icon 时默认用 exe 图标,托盘也是 Shell 提取 exe 图标)。
+  -->
+
+  <!-- 单文件发布:C++/CLI 混合程序集无法从 bundle 加载,排除为独立文件放 exe 旁边 -->
+  <Target Name="ExcludeMixedModeFromSingleFile" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)"
+                             Condition="'%(Filename)' == 'ScreenRecorderLib'">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

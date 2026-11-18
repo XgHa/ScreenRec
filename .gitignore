@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+packages/
+*.user
+third_party/
+publish/
+publish-test/
+x64/
